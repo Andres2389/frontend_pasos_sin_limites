@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import AdminProductsTable from "../../components/AdminProductsTable";
 import AdminEditProductsModal from "../../components/AdminEditProductsModal";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/logohome.png";
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -55,8 +55,18 @@ const Productos = () => {
     }
   };
 
+
   const openEditModal = (p) => {
-    setSelectedProduct(p);
+    // Asegura que el producto tenga todas las propiedades requeridas para inputs controlados
+    setSelectedProduct({
+      nombre: p.nombre ?? "",
+      cantidad: p.cantidad ?? "",
+      valor: p.valor ?? "",
+      descripcion: p.descripcion ?? "",
+      imagen: p.imagen ?? null,
+      _id: p._id,
+      categoria: p.categoria ?? ""
+    });
     setIsEditing(true);
     setShowModal(true);
   };
@@ -65,6 +75,7 @@ const Productos = () => {
     setSelectedProduct({
       nombre: "",
       cantidad: "",
+      valor: "",
       descripcion: "",
       categoria: "",
       imagen: null,
@@ -130,20 +141,30 @@ const Productos = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-500">Cargando productos...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A]">
+        <p className="text-[#D4AF37] text-xl font-bold">Cargando productos...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A] p-4">
       {/* Cabecera */}
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6 mb-6 flex items-center">
-        <img src={Logo} alt="SENA Logo" className="h-10 mr-4" />
-        <h1 className="text-2xl font-bold text-[#0056A6]-700">
+      <div className="max-w-6xl mx-auto bg-[#181818] rounded-2xl shadow-2xl p-6 mb-6 flex items-center border border-[#23232b]/60">
+        <img src={Logo} alt="Logo" className="h-14 mr-4 rounded-xl shadow" />
+        <h1 className="text-3xl font-extrabold text-[#D4AF37] drop-shadow">
           Gestión de Productos
         </h1>
+      </div>
+
+      {/* Botón crear producto */}
+      <div className="max-w-6xl mx-auto flex justify-end mb-4">
+        <button
+          onClick={openCreateModal}
+          className="px-6 py-2 bg-[#D4AF37] text-black font-bold rounded-full shadow hover:bg-[#bfa13a] transition-all"
+        >
+          Crear producto
+        </button>
       </div>
 
       {/* Tabla y buscador */}

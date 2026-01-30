@@ -5,50 +5,52 @@ import { FaTimes } from "react-icons/fa";
 const OrderModal = ({ order, onClose }) => {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60 px-4"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 relative"
+        className="bg-gradient-to-br from-[#18181b] to-[#23232b] rounded-2xl shadow-2xl w-full max-w-2xl p-8 relative border-2 border-[#D4AF37]/30 text-[#B5B5B5]"
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-4 right-4 text-[#D4AF37] hover:text-[#E6C86E] transition"
         >
-          <FaTimes size={18} />
+          <FaTimes size={20} />
         </button>
-        <h2 className="text-2xl font-bold mb-4">Pedido {order.codigoRecogida}</h2>
-        <p className="text-sm text-gray-500 mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-[#D4AF37]">Pedido {order.codigoRecogida}</h2>
+        <p className="text-sm text-[#E6C86E] mb-4">
           Fecha: {new Date(order.createdAt).toLocaleString()}
         </p>
-
-        <table className="w-full text-left mb-4">
+        <table className="w-full text-left mb-6 rounded-xl overflow-hidden">
           <thead>
-            <tr>
-              <th className="py-2">Producto</th>
-              <th className="py-2">Cantidad</th>
-              <th className="py-2">Subtotal</th>
+            <tr className="bg-[#23232b] text-[#D4AF37]">
+              <th className="py-2 px-3">Producto</th>
+              <th className="py-2 px-3">Cantidad</th>
+              <th className="py-2 px-3">Subtotal</th>
             </tr>
           </thead>
           <tbody>
             {order.items.map((it) => (
-              <tr key={it.product}>
-                <td className="py-2">{it.nombre}</td>
-                <td className="py-2">{it.cantidad}</td>
-                <td className="py-2">${it.subTotal.toFixed(2)}</td>
+              <tr key={it.product} className="hover:bg-[#23232b]/40 transition">
+                <td className="py-2 px-3">
+                  {it.nombre}
+                  {it.talla && (
+                    <span className="ml-2 text-xs text-[#E6C86E]">Talla: {it.talla}</span>
+                  )}
+                </td>
+                <td className="py-2 px-3">{it.cantidad}</td>
+                <td className="py-2 px-3 text-[#D4AF37] font-bold">${it.subTotal.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-
         <div className="flex justify-between items-center mb-4">
-          <span className="font-semibold">Total:</span>
-          <span className="font-bold">${order.total.toFixed(2)}</span>
+          <span className="font-semibold text-[#B5B5B5]">Total:</span>
+          <span className="font-bold text-[#D4AF37] text-lg">${order.total.toFixed(2)}</span>
         </div>
-
         <div className="text-right">
-          <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+          <span className="px-4 py-2 text-xs rounded-full bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/40 font-bold">
             {order.estado}
           </span>
         </div>

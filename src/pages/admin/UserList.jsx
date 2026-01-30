@@ -4,7 +4,7 @@ import AdminUserTable from "../../components/AdminUserTable";
 import AdminEditUserModal from "../../components/AdminEditUserModal";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/logohome.png";
 
 const UserList = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -49,7 +49,13 @@ const UserList = () => {
   };
 
   const openEditModal = (user) => {
-    setSelectedUser(user);
+    // Asegura que el usuario tenga todas las propiedades requeridas para inputs controlados
+    setSelectedUser({
+      nombre: user.nombre ?? "",
+      correo: user.correo ?? "",
+      rol: user.rol ?? "user",
+      _id: user._id
+    });
     setShowModal(true);
   };
 
@@ -69,6 +75,7 @@ const UserList = () => {
     }
   };
 
+
   useEffect(() => {
     fetchUsuarios();
   }, []);
@@ -86,21 +93,22 @@ const UserList = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-500">Cargando usuarios...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A]">
+        <p className="text-[#D4AF37] text-xl font-bold">Cargando usuarios...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A] p-4">
       {/* Cabecera centrada y responsive */}
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6 mb-6 flex flex-col items-center text-center">
-        <img src={Logo} alt="Farmacenter Logo" className="h-20 mb-4" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#0056A6]">
+      <div className="max-w-6xl mx-auto bg-[#181818] rounded-2xl shadow-2xl p-6 mb-6 flex flex-col items-center text-center border border-[#23232b]/60">
+        <img src={Logo} alt="Logo" className="h-20 mb-4 rounded-xl shadow" />
+        <h1 className="text-3xl font-extrabold text-[#D4AF37] drop-shadow">
           Gestión de Usuarios
         </h1>
       </div>
+
 
       {/* Tabla y buscador */}
       <AdminUserTable
@@ -126,6 +134,7 @@ const UserList = () => {
           onSave={handleSaveChanges}
         />
       )}
+
     </div>
   );
 };

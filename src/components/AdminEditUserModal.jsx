@@ -20,7 +20,7 @@ const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
         <div className="space-y-4">
           <input
             type="text"
-            value={selectedUser.nombre}
+            value={selectedUser.nombre ?? ""}
             onChange={(e) =>
               onChange({ ...selectedUser, nombre: e.target.value })
             }
@@ -29,7 +29,7 @@ const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
           />
           <input
             type="email"
-            value={selectedUser.correo}
+            value={selectedUser.correo ?? ""}
             onChange={(e) =>
               onChange({ ...selectedUser, correo: e.target.value })
             }
@@ -37,7 +37,7 @@ const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-[#0056A6]-200 focus:border-[#0056A6]-600 outline-none"
           />
           <select
-            value={selectedUser.rol}
+            value={selectedUser.rol ?? "user"}
             onChange={(e) =>
               onChange({ ...selectedUser, rol: e.target.value })
             }
@@ -60,7 +60,13 @@ const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
             onClick={onSave}
             className="px-4 py-2 bg-[#0056A6]-600 text-white rounded hover:bg-[#0056A6]-700 transition"
           >
-            Guardar Cambios
+            Guardar
+          </button>
+          <button
+            onClick={onSave}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+          >
+            Crear
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@ const AdminLayout = ({ user, onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 grid md:grid-cols-[16rem_1fr] relative">
+    <div className="min-h-screen bg-black grid md:grid-cols-[16rem_1fr] relative">
       <Sidebar
         user={user}
         onLogout={onLogout}

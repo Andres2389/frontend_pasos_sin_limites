@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaTimes, FaUser, FaBox, FaDashcube, FaCartArrowDown } from "react-icons/fa";
-import Logo from "../assets/logo.png";
+import { FaTimes, FaUser, FaBox, FaDashcube, FaCartArrowDown, FaChartBar } from "react-icons/fa";
+import Logo from "../assets/logohome.png";
 
 const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
   const [user, setUser] = useState(propUser || null);
@@ -22,7 +22,8 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
     { name: "Usuarios",   icon: <FaUser />,     path: "/admin/usuarios" },
     { name: "Productos",  icon: <FaBox />,      path: "/admin/productos" },
     { name: "Pedidos",  icon: <FaCartArrowDown />,      path: "/admin/pedidos" },
-
+    { name: "Inventario", icon: <FaBox />, path: "/admin/inventario" },
+    { name: "Ventas", icon: <FaChartBar />, path: "/admin/ventas" }, // <-- Nuevo enlace
   ];
 
   const userItems = [
@@ -43,17 +44,17 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
       )}
 
       <div
-        className={`bg-[#0056A] w-64 shadow-lg fixed md:relative z-20 transition-transform duration-300 md:translate-x-0 ${
+        className={`bg-gradient-to-b from-[#0B0B0B] to-[#181818] w-64 shadow-lg fixed md:relative z-20 transition-transform duration-300 md:translate-x-0 ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         } md:block flex flex-col justify-start h-screen`}
       >
         {/* Logo y título */}
-        <div className="p-4 flex items-center justify-between bg-[#0056A]">
+        <div className="p-4 flex items-center justify-between bg-transparent">
           <div className="flex items-center">
-            <img src={Logo} alt="SENA Logo" className="h-20 mr-2" />
+            <img src={Logo} alt="Logo" className="h-20 mr-2 rounded-xl shadow" />
           </div>
           <button
-            className="md:hidden text-[#0056A]"
+            className="md:hidden text-[#D4AF37]"
             onClick={() => setMenuOpen(false)}
           >
             <FaTimes />
@@ -63,16 +64,16 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
         {/* Contenido alineado arriba */}
         <div className="p-4 text-left overflow-y-auto flex-1">
           <div className="mb-6">
-            <p className="font-medium">Bienvenido,</p>
-            <p className="font-semibold">{user?.nombre || "Usuario"}</p>
-            <p className="text-sm italic capitalize">{user?.rol || "usuario"}</p>
+            <p className="font-bold text-[#D4AF37]">Bienvenido,</p>
+            <p className="font-bold text-[#D4AF37]">{user?.nombre || "Usuario"}</p>
+            <p className="text-sm italic capitalize text-[#D4AF37]">{user?.rol || "usuario"}</p>
           </div>
 
           <nav className="flex flex-col gap-3">
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-3 text-[#0056A] hover:text-[#0056A] transition-colors p-2 rounded-md"
+              className="flex items-center gap-3 text-[#D4AF37] hover:text-[#E6C86E] transition-colors p-2 rounded-md font-semibold"
             >
               <FaDashcube /> Inicio
             </Link>
@@ -81,7 +82,7 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
                 key={item.name}
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 text-gray-700 hover:text-[#0056A6] transition-colors p-2 rounded-md"
+                className="flex items-center gap-3 text-[#D4AF37] hover:text-[#E6C86E] transition-colors p-2 rounded-md font-semibold"
               >
                 {item.icon}
                 {item.name}
@@ -94,7 +95,7 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
         <div className="p-4">
           <button
             onClick={onLogout}
-            className="w-full bg-[#0056A6] text-white px-4 py-2 rounded hover:bg-[#0056A6] transition"
+            className="w-full bg-[#D4AF37] text-black px-4 py-2 rounded-xl font-bold hover:bg-[#E6C86E] transition"
           >
             Cerrar sesión
           </button>

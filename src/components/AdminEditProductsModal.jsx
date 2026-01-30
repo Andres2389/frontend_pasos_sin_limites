@@ -46,28 +46,28 @@ const AdminEditProductsModal = ({
         <div className="space-y-4">
           <input
             type="text"
-            value={product.nombre}
+            value={product.nombre ?? ""}
             onChange={(e) => onChange({ ...product, nombre: e.target.value })}
             placeholder="Nombre del producto"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
           <input
             type="number"
-            value={product.cantidad}
+            value={product.cantidad ?? ""}
             onChange={(e) => onChange({ ...product, cantidad: e.target.value })}
             placeholder="Cantidad"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
           <input
             type="number"
-            value={product.valor}
+            value={product.valor ?? ""}
             onChange={(e) => onChange({ ...product, valor: e.target.value })}
             placeholder="Valor"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
           <input
             type="text"
-            value={product.descripcion}
+            value={product.descripcion ?? ""}
             onChange={(e) =>
               onChange({ ...product, descripcion: e.target.value })
             }

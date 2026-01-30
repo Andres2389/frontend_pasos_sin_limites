@@ -6,10 +6,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+// Integración Mercado Pago
+// ...existing code...
+
 const Checkout = () => {
   const { items, totalPrice, removeItem, clearCart } =
     useContext(CartContext);
   const navigate = useNavigate();
+
+  // ...existing code...
 
   // 1) Validar que el usuario esté logueado
   useEffect(() => {
@@ -43,11 +48,39 @@ const Checkout = () => {
         payload
       );
 
-      toast.success(`Pedido ${data.order.codigo} creado!`);
-      clearCart();
-      navigate("/pedidos");
+      // Guardar orderId para Mercado Pago
+      if (data.order && data.order._id) {
+        localStorage.setItem("lastOrderId", data.order._id);
+      }
+
+      toast.success(`Pedido ${data.order.codigoRecogida} creado! Ahora puedes pagar con Mercado Pago.`);
+      // Ya no limpiamos el carrito ni navegamos aquí. El usuario puede pagar ahora.
     } catch (err) {
       toast.error(err.response?.data?.message || "Error al procesar pedido");
+    }
+  };
+
+  // Integración Mercado Pago
+  const handleMercadoPago = async () => {
+    try {
+      const orderId = localStorage.getItem("lastOrderId");
+      if (!orderId) {
+        toast.error("No se encontró la orden para pagar");
+        return;
+      }
+      const response = await axios.post(
+        "http://localhost:5000/api/payments/create-preference",
+        { orderId }
+      );
+      const { sandbox_init_point, init_point } = response.data;
+      const redirectUrl = sandbox_init_point || init_point;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        toast.error("No se pudo iniciar el pago");
+      }
+    } catch (err) {
+      toast.error("Error al conectar con Mercado Pago");
     }
   };
 
@@ -59,6 +92,8 @@ const Checkout = () => {
       </div>
     );
   }
+
+  // ...existing code...
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -97,18 +132,28 @@ const Checkout = () => {
           <p className="text-lg font-bold">${totalPrice.toFixed(2)}</p>
         </div>
 
+        {/* Botón checkout normal */}
         <button
           onClick={handleFinish}
-          className="mt-6 w-full bg-[#0056A6] text-white py-3 rounded-lg hover:bg-[#004488] transition"
+          className="mt-4 w-full bg-[#0056A6] text-white py-3 rounded-lg hover:bg-[#004488] transition"
         >
           Finalizar Compra
         </button>
-          <button
-            onClick={() => navigate("/")}
-            className="mt-4 w-full bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition"
-          >
-            Volver al Home
-           </button>
+
+        {/* Botón Mercado Pago */}
+        <button
+          onClick={handleMercadoPago}
+          className="mt-4 w-full bg-[#00A650] text-white py-3 rounded-lg hover:bg-[#008f39] transition"
+        >
+          Pagar con Mercado Pago
+        </button>
+
+        <button
+          onClick={() => navigate("/")}
+          className="mt-4 w-full bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition"
+        >
+          Volver al Home
+        </button>
 
       </div>
     </div>

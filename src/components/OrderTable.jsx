@@ -2,19 +2,20 @@
 import React from "react";
 
 const OrderTable = ({ orders, onView }) => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   if (!orders.length) {
     return (
-      <p className="text-center text-gray-600 mt-10">
+      <p className="text-center text-[#D4AF37]/80 mt-10">
         No tienes pedidos por el momento.
       </p>
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-6xl mx-auto mt-6 overflow-x-auto">
-      <table className="min-w-[700px] w-full text-sm text-left border-separate border-spacing-y-2">
+    <div className="bg-[#181818] p-2 sm:p-4 md:p-6 rounded-xl shadow-md w-full max-w-full md:max-w-4xl lg:max-w-6xl mx-auto mt-6 overflow-x-auto border-2 border-[#D4AF37]/60">
+      <table className="min-w-[600px] w-full text-xs sm:text-sm text-left border-separate border-spacing-y-2 break-words">
         <thead>
-          <tr className="bg-[#0056A6] text-white">
+          <tr className="bg-[#23232b] text-[#D4AF37]">
             <th className="px-4 py-3">Código</th>
             <th className="px-4 py-3">Fecha</th>
             <th className="px-4 py-3">Total</th>
@@ -24,20 +25,56 @@ const OrderTable = ({ orders, onView }) => {
         </thead>
         <tbody>
           {orders.map((o) => (
-            <tr key={o._id} className="bg-gray-50 hover:bg-gray-100 transition">
-              <td className="px-4 py-3 font-medium">{o.codigoRecogida}</td>
-              <td className="px-4 py-3">
-                {new Date(o.createdAt).toLocaleDateString()}
-              </td>
-              <td className="px-4 py-3">${o.total.toFixed(2)}</td>
-              <td className="px-4 py-3 capitalize">{o.estado}</td>
+            <tr key={o._id} className="bg-[#181818] hover:bg-[#23232b] transition border-b border-[#23232b]">
+              <td className="px-4 py-3 font-medium text-[#D4AF37]">{o.codigoRecogida}</td>
+              <td className="px-4 py-3 text-white">{new Date(o.createdAt).toLocaleDateString()}</td>
+              <td className="px-4 py-3 text-white">${o.total.toFixed(2)}</td>
+              <td className="px-4 py-3 capitalize text-white">{o.estado}</td>
               <td className="px-4 py-3 text-center">
                 <button
                   onClick={() => onView(o)}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition mr-2 shadow"
                 >
                   Ver
                 </button>
+                {/* Solo mostrar botón pagar si es rol user y estado PENDING */}
+                {user.rol === "user" && (o.estado === "PENDING" || o.estado === "PENDIENTE") && !o.entregado && (
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("lastOrderId", o._id);
+                      // Poblar carrito con productos de la orden
+                      const cartItems = o.items.map(i => ({ ...i }));
+                      localStorage.setItem("costehuilense_cart", JSON.stringify(cartItems));
+                      window.location.href = "/checkout";
+                    }}
+                    className="px-3 py-1 bg-[#D4AF37] text-[#181818] font-bold rounded hover:bg-[#bfa133] transition mr-2 shadow"
+                  >
+                    Pagar
+                  </button>
+                )}
+                {/* Botón cancelar solo para rol user si el pedido no está cancelado */}
+                {user.rol === "user" && o.estado !== "CANCELLED" && (
+                  <button
+                    onClick={async () => {
+                      try {
+                        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders/${o._id}/cancel`, {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                          },
+                          body: JSON.stringify({ userId: user._id, rol: user.rol }),
+                        });
+                        window.location.reload();
+                      } catch {
+                        alert("Error al cancelar el pedido");
+                      }
+                    }}
+                    className="px-3 py-1 bg-[#B91C1C] text-white font-bold rounded hover:bg-[#7f1d1d] transition shadow"
+                  >
+                    Cancelar
+                  </button>
+                )}
               </td>
             </tr>
           ))}

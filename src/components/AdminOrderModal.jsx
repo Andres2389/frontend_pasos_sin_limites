@@ -1,4 +1,3 @@
-// src/components/AdminOrderModal.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -34,6 +33,7 @@ export default function AdminOrderModal({ order, onClose, onDelivered }) {
         >
           ✕
         </button>
+
         <h2 className="text-2xl font-bold mb-4">
           Detalles del pedido {order.codigoRecogida}
         </h2>
@@ -41,17 +41,26 @@ export default function AdminOrderModal({ order, onClose, onDelivered }) {
         <table className="w-full text-left mb-4">
           <thead>
             <tr>
-              <th className="py-2">Medicamento</th>
+              <th className="py-2">Producto</th>
               <th className="py-2">Cantidad</th>
               <th className="py-2">Subtotal</th>
             </tr>
           </thead>
           <tbody>
             {order.items.map((it) => (
-              <tr key={it.product}>
-                <td className="py-2">{it.nombre}</td>
+              <tr key={it.product || it._id}>
+                <td className="py-2">
+                  {it.nombre}
+                  {it.talla && (
+                    <span className="ml-2 text-xs text-gray-500">
+                      (Talla: {it.talla})
+                    </span>
+                  )}
+                </td>
                 <td className="py-2">{it.cantidad}</td>
-                <td className="py-2">${it.subTotal.toFixed(2)}</td>
+                <td className="py-2 font-semibold">
+                  ${Number(it.subTotal).toLocaleString("es-CO")}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -59,7 +68,9 @@ export default function AdminOrderModal({ order, onClose, onDelivered }) {
 
         <div className="flex justify-between items-center mb-4">
           <span className="font-semibold">Total:</span>
-          <span className="font-bold">${order.total.toFixed(2)}</span>
+          <span className="font-bold">
+            ${Number(order.total).toLocaleString("es-CO")}
+          </span>
         </div>
 
         <input

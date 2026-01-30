@@ -3,7 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash, FaEnvelope, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logohome.png";
+import ButtonGold from "../ui/ButtonGold";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -52,16 +53,13 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        {/* Logo */}
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A] flex items-center justify-center px-4 text-[#B5B5B5] font-sans">
+      <div className="max-w-md w-full bg-[#18181b] p-8 rounded-2xl shadow-2xl border border-[#D4AF37]/20">
         <div className="flex justify-center mb-6">
-          <img src={Logo} alt=" Logo" className="h-14" />
+          <img src={Logo} alt="Logo" className="h-20 w-auto" />
         </div>
-
-        <h2 className="text-2xl font-bold text-center mb-6 text-[#0056A6]">Crear Cuenta</h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <h2 className="text-2xl font-bold text-center mb-6 text-[#D4AF37] tracking-wide">Crear Cuenta</h2>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Nombre con ícono */}
           <div className="relative">
             <input
@@ -71,11 +69,10 @@ const Register = () => {
               value={formData.nombre}
               onChange={handleChange}
               required
-              className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0056A6] text-gray-700"
+              className="w-full pl-4 pr-10 py-3 bg-[#23232b] border border-[#D4AF37]/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] text-[#B5B5B5] placeholder-[#B5B5B5]"
             />
-            <FaUser className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#0056A6]" />
+            <FaUser className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D4AF37]" />
           </div>
-
           {/* Correo con ícono */}
           <div className="relative">
             <input
@@ -85,11 +82,10 @@ const Register = () => {
               value={formData.correo}
               onChange={handleChange}
               required
-              className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0056A6] text-gray-700"
+              className="w-full pl-4 pr-10 py-3 bg-[#23232b] border border-[#D4AF37]/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] text-[#B5B5B5] placeholder-[#B5B5B5]"
             />
-            <FaEnvelope className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#0056A6]" />
+            <FaEnvelope className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D4AF37]" />
           </div>
-
           {/* Contraseña con ojito */}
           <div className="relative">
             <input
@@ -99,32 +95,27 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0056A6] text-gray-700"
+              className="w-full pl-4 pr-10 py-3 bg-[#23232b] border border-[#D4AF37]/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] text-[#B5B5B5] placeholder-[#B5B5B5]"
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#0056A6] cursor-pointer"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D4AF37] cursor-pointer"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
           </div>
-
           {/* Botón registrar */}
-          <button
-            type="submit"
-            className="w-full bg-[#0056A6] text-white px-4 py-3 rounded-lg hover:bg-[#004488] transition"
-          >
+          <ButtonGold type="submit" className="w-full py-3 mt-2">
             Registrarse
-          </button>
+          </ButtonGold>
         </form>
-
         {/* Enlaces abajo */}
-        <div className="mt-6 flex flex-col items-center gap-2 text-sm text-[#0056A6]">
-          <Link to="/login" className="font-medium hover:text-[#3399FF] transition">
+        <div className="mt-7 flex flex-col items-center gap-2 text-sm">
+          <Link to="/login" className="font-medium text-[#D4AF37] hover:text-[#E6C86E] transition">
             ¿Ya tienes cuenta? Inicia sesión
           </Link>
-          <Link to="/" className="font-medium hover:text-[#3399FF] transition">
-            Volver al  inicio
+          <Link to="/" className="font-medium text-[#D4AF37] hover:text-[#E6C86E] transition">
+            Volver al inicio
           </Link>
         </div>
       </div>

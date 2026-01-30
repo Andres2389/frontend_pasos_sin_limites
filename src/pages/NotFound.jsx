@@ -7,7 +7,7 @@ const NotFound = () => {
       {/* Logo y nombre de la aplicación */}
       <div className="flex items-center mb-8">
         <img src={Logo} alt="SENA Logo" className="h-10 mr-3" />
-        <h1 className="text-2xl font-bold text-[#0056A6]-700">COSTEHUILENSE</h1>
+        <h1 className="text-2xl font-bold text-[#0056A6]-700">PASOS SIN LÍMITES</h1>
       </div>
       <div className="bg-white p-8 rounded-xl shadow-md text-center max-w-md w-full">
         <h2 className="text-6xl font-extrabold text-[#0056A6]-600 mb-4">404</h2>

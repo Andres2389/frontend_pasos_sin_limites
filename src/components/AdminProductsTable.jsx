@@ -14,79 +14,63 @@ const AdminProductsTable = ({
   onPageChange,
 }) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-5xl mx-auto mt-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-[#0056A6] flex items-center gap-2">
-          <FaBox /> Lista de Productos
-        </h2>
-        <button
-          onClick={onCreate}
-          className="bg-[#0056A6] text-white px-4 py-2 rounded hover:bg-[#3399FF] transition"
-        >
-          + Nuevo Producto
-        </button>
-      </div>
-
-      <div className="relative max-w-sm mx-auto mb-6">
-        <FaSearch className="absolute left-3 top-3 text-gray-400" />
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Buscar por nombre..."
-          className="w-full pl-10 pr-4 py-2 border border-[#B0C4DE] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3399FF]"
-        />
-      </div>
-
+    <div className="bg-gradient-to-br from-[#18181b] to-[#23232b] p-6 rounded-2xl shadow-2xl w-full max-w-5xl mx-auto mt-6 border-2 border-[#D4AF37]/20 text-[#B5B5B5]">
+      <h2 className="text-2xl font-bold text-[#D4AF37] mb-6 text-center flex items-center justify-center gap-2">
+        Productos
+      </h2>
       <div className="overflow-x-auto">
-        <table className="min-w-[700px] w-full text-sm text-left border-separate border-spacing-y-2">
+        <table className="min-w-[700px] w-full text-sm text-left border-separate border-spacing-y-2 rounded-xl overflow-hidden">
           <thead>
-            <tr className="bg-[#0056A6] text-white">
+            <tr className="bg-[#23232b] text-[#D4AF37]">
               <th className="px-4 py-3">Imagen</th>
               <th className="px-4 py-3">Nombre</th>
-              <th className="px-4 py-3">Cantidad</th>
-              <th className="px-4 py-3">Valor</th>
-              <th className="px-4 py-3">Descripción</th>
-              <th className="px-4 py-3 text-center">Acciones</th>
+              <th className="px-4 py-3">Precio</th>
+              <th className="px-4 py-3">Stock</th>
+              <th className="px-4 py-3">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {productos.map((p) => (
+            {productos.map((p, idx) => (
               <tr
                 key={p._id}
-                className="bg-gray-50 hover:bg-[#0056A6]/10 transition"
+                className={`transition-all duration-300 border border-[#D4AF37]/10 ${idx % 2 === 0 ? 'bg-[#18181b]' : 'bg-[#111112]'} hover:bg-[#23232b]/80 rounded-xl`}
               >
                 <td className="px-4 py-3">
                   {p.imagen ? (
                     <img
                       src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${p.imagen}`}
-                      alt="producto"
-                      className="h-12 w-12 object-cover rounded-md"
+                      alt={p.nombre}
+                      className="h-14 w-14 object-cover rounded-xl border-2 border-[#D4AF37]/60 shadow-md bg-[#23232b]"
                     />
                   ) : (
-                    <span className="text-gray-400 italic">Sin imagen</span>
+                    <span className="text-xs text-[#B5B5B5]">Sin imagen</span>
                   )}
                 </td>
-                <td className="px-4 py-3 font-medium text-gray-900">
+                <td className="px-4 py-3 font-extrabold text-lg text-[#D4AF37] tracking-wide drop-shadow">
                   {p.nombre}
                 </td>
-                <td className="px-4 py-3 text-gray-700">{p.cantidad}</td>
-                <td className="px-4 py-3 text-gray-700">{p.valor}</td>
-                <td className="px-4 py-3 text-gray-700">{p.descripcion}</td>
-                <td className="px-4 py-3 text-center space-x-2">
+                <td className="px-4 py-3 text-[#D4AF37] font-bold text-base">
+                  {typeof p.valor === 'number' && !isNaN(p.valor)
+                    ? p.valor.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })
+                    : <span className="text-[#B5B5B5]">—</span>}
+                </td>
+                <td className="px-4 py-3 text-[#D4AF37] font-extrabold text-base">
+                  {typeof p.cantidad === 'number' && !isNaN(p.cantidad)
+                    ? p.cantidad
+                    : <span className="text-[#B5B5B5]">—</span>}
+                </td>
+                <td className="px-4 py-3 space-x-2 flex flex-wrap items-center">
                   <button
                     onClick={() => onEdit(p)}
-                    className="text-yellow-500 hover:text-yellow-600 text-xl"
-                    title="Editar"
+                    className="px-4 py-1 text-sm font-bold border-2 border-[#D4AF37] bg-[#181818] text-[#D4AF37] rounded-full shadow hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 transition-all duration-300"
                   >
-                    <FaEdit />
+                    Editar
                   </button>
                   <button
                     onClick={() => onDelete(p._id)}
-                    className="text-red-600 hover:text-red-700 text-xl"
-                    title="Eliminar"
+                    className="px-4 py-1 text-sm font-bold border-2 border-red-600 bg-[#181818] text-red-500 rounded-full shadow hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 transition-all duration-300"
                   >
-                    <FaTrash />
+                    Eliminar
                   </button>
                 </td>
               </tr>
@@ -94,24 +78,6 @@ const AdminProductsTable = ({
           </tbody>
         </table>
       </div>
-
-      {totalPages > 1 && (
-        <div className="mt-6 flex justify-center gap-2">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => onPageChange(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1
-                  ? "bg-[#0056A6]-600 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

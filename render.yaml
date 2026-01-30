@@ -1,7 +1,7 @@
 services:
   # ------------ FRONTEND ------------
   - type: static
-    name: costehuilense-frontend
+    name: pasos-sin-limites-frontend
     branch: master
     rootDir: frontend-auth
     buildCommand: npm install && npm run build
