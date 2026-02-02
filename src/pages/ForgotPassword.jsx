@@ -21,9 +21,10 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-[#18181b] to-black flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-[#18181b] p-10 rounded-2xl shadow-2xl border border-[#FFD700]">
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <img src={Logo} alt="Logo Pasos Sin Límites" className="h-16 drop-shadow-lg" />
+        {/* Logo y nombre */}
+        <div className="flex flex-col items-center mb-6">
+          <img src={Logo} alt="Logo Pasos Sin Límites" className="h-16 drop-shadow-lg mb-2" />
+          <h1 className="text-2xl font-bold text-[#FFD700] tracking-wide mb-2">PASOS SIN LÍMITES</h1>
         </div>
 
         <h2 className="text-3xl font-extrabold text-center mb-8 text-[#FFD700] tracking-wide drop-shadow">
