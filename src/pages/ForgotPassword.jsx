@@ -19,18 +19,18 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+    <div className="min-h-screen bg-gradient-to-br from-[#0056A6] via-[#0077C2] to-[#00B4D8] flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white/90 p-10 rounded-2xl shadow-2xl border border-[#0056A6]/20">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src={Logo} alt="Farmacenter Logo" className="h-14" />
+          <img src={Logo} alt="Logo Pasos Sin Límites" className="h-16 drop-shadow-lg" />
         </div>
 
-        <h2 className="text-2xl font-bold text-center mb-6 text-[#0056A6]">
+        <h2 className="text-3xl font-extrabold text-center mb-8 text-[#0056A6] tracking-wide drop-shadow">
           Recuperar Contraseña
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Input con ícono */}
           <div className="relative">
             <input
@@ -39,44 +39,44 @@ const ForgotPassword = () => {
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
               required
-              className="w-full pl-4 pr-10 py-3 border border-[#0056A6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F36F21] text-gray-700"
+              className="w-full pl-4 pr-12 py-3 border-2 border-[#0056A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFD700] text-gray-700 shadow"
             />
-            <FaEnvelope className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#0056A6]" />
+            <FaEnvelope className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#0056A6] text-xl" />
           </div>
 
           {/* Botón enviar */}
           <button
             type="submit"
-            className="w-full bg-[#0056A6] text-white px-4 py-3 rounded-lg hover:bg-[#004488] transition"
+            className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#0056A6] font-bold px-4 py-3 rounded-xl shadow hover:scale-105 transition-transform duration-200"
           >
             Enviar correo de recuperación
           </button>
         </form>
 
         {/* Enlaces */}
-        <div className="mt-6">
+        <div className="mt-8">
           {/* Iniciar sesión y crear cuenta en fila */}
-          <div className="flex justify-center gap-6 mb-4 text-sm text-gray-700">
+          <div className="flex justify-center gap-8 mb-4 text-sm text-[#0056A6] font-medium">
             <Link
               to="/login"
-              className="flex items-center gap-2 hover:text-[#F36F21] transition font-medium"
+              className="flex items-center gap-2 hover:text-[#FFA500] transition"
             >
               <FaUserTie /> Iniciar Sesión
             </Link>
 
             <Link
               to="/register"
-              className="flex items-center gap-2 hover:text-[#F36F21] transition font-medium"
+              className="flex items-center gap-2 hover:text-[#FFA500] transition"
             >
               <FaUserPlus /> Crear Cuenta
             </Link>
           </div>
 
           {/* Volver al inicio centrado */}
-          <div className="text-center text-sm text-gray-700">
+          <div className="text-center text-sm text-[#0056A6] font-medium">
             <Link
               to="/"
-              className="flex items-center justify-center gap-2 hover:text-[#F36F21] transition font-medium"
+              className="flex items-center justify-center gap-2 hover:text-[#FFA500] transition"
             >
               <FaHome /> Volver al inicio
             </Link>

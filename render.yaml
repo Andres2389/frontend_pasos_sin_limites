@@ -2,10 +2,10 @@ services:
   # ------------ FRONTEND ------------
   - type: static
     name: pasos-sin-limites-frontend
-    branch: master
+    branch: main
     rootDir: frontend-auth
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://backend-pasos-sin-limites-1.onrender.com
+        value: https://pasos-sin-limites-backend.onrender.com

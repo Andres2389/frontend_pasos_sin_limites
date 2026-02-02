@@ -137,7 +137,7 @@ const Checkout = () => {
           onClick={handleFinish}
           className="mt-4 w-full bg-[#0056A6] text-white py-3 rounded-lg hover:bg-[#004488] transition"
         >
-          Finalizar Compra
+          Finalizar Pedido
         </button>
 
         {/* Botón Mercado Pago */}
@@ -145,7 +145,7 @@ const Checkout = () => {
           onClick={handleMercadoPago}
           className="mt-4 w-full bg-[#00A650] text-white py-3 rounded-lg hover:bg-[#008f39] transition"
         >
-          Pagar con Mercado Pago
+          Pagar
         </button>
 
         <button
