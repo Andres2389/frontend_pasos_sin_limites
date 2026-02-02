@@ -73,7 +73,7 @@ const ProductGallery = ({ openSidebar }) => {
       {/* Header + buscador */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-6 bg-gradient-to-r from-[#23232b] to-[#18181b] p-6 rounded-2xl shadow-xl border border-[#D4AF37]">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#D4AF37] flex items-center gap-2">
-          <FaSyringe className="text-[#D4AF37]" />
+          <FaUtensils className="text-[#D4AF37]" />
           Catálogo de Productos
         </h2>
         <div className="w-full sm:w-[400px] relative">

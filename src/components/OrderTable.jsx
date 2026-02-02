@@ -43,7 +43,14 @@ const OrderTable = ({ orders, onView }) => {
                     onClick={() => {
                       localStorage.setItem("lastOrderId", o._id);
                       // Poblar carrito con productos de la orden
-                      const cartItems = o.items.map(i => ({ ...i }));
+                      const cartItems = o.items.map(i => ({
+                        _id: i.product,
+                        nombre: i.nombre,
+                        valor: i.valorUnitario,
+                        cantidad: i.cantidad,
+                        imagen: i.imagen || "",
+                        talla: i.talla || ""
+                      }));
                       localStorage.setItem("costehuilense_cart", JSON.stringify(cartItems));
                       window.location.href = "/checkout";
                     }}
