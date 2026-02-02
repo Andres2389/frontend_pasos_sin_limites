@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEnvelope, FaUserTie, FaUserPlus, FaHome } from "react-icons/fa";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logohome.png";
 import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
