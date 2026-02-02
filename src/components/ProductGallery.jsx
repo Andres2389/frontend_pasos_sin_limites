@@ -2,7 +2,7 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import ProductModal from "./ProductModal";
-import { FaSyringe, FaTimes, FaUtensils } from "react-icons/fa";
+import {  FaTimes, FaShoePrints } from "react-icons/fa";
 import { CartContext } from "../context/CartContext";
 
 const ProductGallery = ({ openSidebar }) => {
@@ -73,7 +73,7 @@ const ProductGallery = ({ openSidebar }) => {
       {/* Header + buscador */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-6 bg-gradient-to-r from-[#23232b] to-[#18181b] p-6 rounded-2xl shadow-xl border border-[#D4AF37]">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-[#D4AF37] flex items-center gap-2">
-          <FaUtensils className="text-[#D4AF37]" />
+          <FaShoePrints className="text-[#D4AF37]" />
           Catálogo de Productos
         </h2>
         <div className="w-full sm:w-[400px] relative">
