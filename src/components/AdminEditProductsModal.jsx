@@ -44,14 +44,6 @@ const AdminEditProductsModal = ({
         </h2>
 
         <div className="space-y-4">
-                    {/* Campo de tallas */}
-                    <input
-                      type="text"
-                      value={Array.isArray(product.talla) ? product.talla.join(", ") : product.talla ?? ""}
-                      onChange={e => onChange({ ...product, talla: e.target.value.split(",").map(t => t.trim()) })}
-                      placeholder="Tallas disponibles (separadas por coma)"
-                      className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
-                    />
           <input
             type="text"
             value={product.nombre ?? ""}

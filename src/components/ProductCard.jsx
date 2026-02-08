@@ -32,12 +32,6 @@ const ProductCard = ({ product, onOpenModal }) => {
         <h3 className="text-lg font-bold text-[#E6C86E] leading-tight">
           {product.nombre}
         </h3>
-        {/* Tallas disponibles */}
-        {product.talla && product.talla.length > 0 && (
-          <div className="mt-2 text-xs text-[#E6C86E]">
-            <span className="font-semibold">Tallas:</span> {Array.isArray(product.talla) ? product.talla.join(", ") : product.talla}
-          </div>
-        )}
         <p className="text-[#D4AF37] text-xl font-extrabold mt-2">
           ${product.valor?.toLocaleString("es-CO")}
         </p>
