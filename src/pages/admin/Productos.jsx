@@ -15,13 +15,23 @@ const Productos = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 5;
 
-  // Fetch productos dentro de un useEffect normal
-  const fetchProductos = async () => {
+
+  // Fetch productos con paginación y búsqueda
+  const fetchProductos = async (page = 1, searchValue = "") => {
+    setLoading(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/productos`);
-      setProductos(data);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/productos`, {
+        params: {
+          page,
+          limit: itemsPerPage,
+          search: searchValue
+        }
+      });
+      setProductos(data.products || []);
+      setTotalPages(Math.ceil((data.total || 0) / itemsPerPage));
     } catch {
       toast.error("Error al obtener productos");
     } finally {
@@ -30,8 +40,9 @@ const Productos = () => {
   };
 
   useEffect(() => {
-    fetchProductos();
-  }, []);
+    fetchProductos(currentPage, search);
+    // eslint-disable-next-line
+  }, [currentPage, search]);
 
   const eliminarProducto = async (id) => {
     const result = await Swal.fire({
@@ -130,14 +141,9 @@ const Productos = () => {
     }
   };
 
-  const filtered = productos.filter((p) =>
-    p.nombre.toLowerCase().includes(search.toLowerCase())
-  );
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const paginated = filtered.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+
+  // Ya no se filtra ni pagina en frontend, se usa la respuesta del backend
+  const paginated = productos;
 
   if (loading) {
     return (

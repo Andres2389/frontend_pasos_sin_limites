@@ -18,6 +18,21 @@ const AdminProductsTable = ({
       <h2 className="text-2xl font-bold text-[#D4AF37] mb-6 text-center flex items-center justify-center gap-2">
         Productos
       </h2>
+
+      {/* Input de búsqueda */}
+      <div className="flex justify-end mb-4">
+        <div className="relative w-full max-w-xs">
+          <input
+            type="text"
+            className="pl-10 pr-4 py-2 rounded-full border border-[#D4AF37]/40 bg-[#18181b] text-[#D4AF37] placeholder-[#B5B5B5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] w-full"
+            placeholder="Buscar producto..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#D4AF37]" />
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-[700px] w-full text-sm text-left border-separate border-spacing-y-2 rounded-xl overflow-hidden">
           <thead>
@@ -77,6 +92,19 @@ const AdminProductsTable = ({
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-6 gap-2">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => onPageChange(i + 1)}
+            className={`px-4 py-2 rounded-full font-bold border-2 border-[#D4AF37] text-[#D4AF37] bg-[#18181b] shadow hover:bg-[#D4AF37] hover:text-black transition-all duration-300 ${currentPage === i + 1 ? 'bg-[#D4AF37] text-black' : ''}`}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );
