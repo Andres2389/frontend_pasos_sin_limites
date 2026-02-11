@@ -1,7 +1,5 @@
 // src/pages/admin/VentasAdmin.jsx
 import { useEffect, useState } from "react";
-import Paginacion from "../../components/Paginacion";
-import Buscador from "../../components/Buscador";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +11,6 @@ const VentasAdmin = () => {
   const [productos, setProductos] = useState([]);
   const [seleccionados, setSeleccionados] = useState([]); // [{_id, cantidad}]
   const [ventasDiarias, setVentasDiarias] = useState([]);
-  const [ventasTotal, setVentasTotal] = useState(0);
-  const [ventasPage, setVentasPage] = useState(1);
-  const [ventasPages, setVentasPages] = useState(1);
-  const [ventasSearch, setVentasSearch] = useState("");
-  const ventasLimit = 10;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -45,29 +38,19 @@ const VentasAdmin = () => {
     fetchProductos();
   }, []);
 
-  // Obtener ventas diarias con paginación y búsqueda
+  // Obtener ventas diarias
   useEffect(() => {
     const fetchVentas = async () => {
       try {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
-        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/sales/daily`, {
-          params: {
-            userId: user._id,
-            page: ventasPage,
-            limit: ventasLimit,
-            search: ventasSearch
-          }
-        });
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/sales/daily?userId=${user._id}`);
         setVentasDiarias(data.ventas || []);
-        setVentasTotal(data.total || 0);
-        setVentasPages(Math.ceil((data.total || 0) / ventasLimit));
       } catch (err) {
         toast.error("Error al cargar ventas diarias");
       }
     };
     fetchVentas();
-    // eslint-disable-next-line
-  }, [ventasPage, ventasSearch]);
+  }, []);
 
   // Seleccionar producto y cantidad
   const handleSelect = (id, cantidad) => {
@@ -169,7 +152,6 @@ const VentasAdmin = () => {
         </button>
         {/* Tabla de ventas diarias */}
         <h2 className="text-lg font-semibold mb-2 text-[#D4AF37]">Ventas Diarias</h2>
-        <Buscador value={ventasSearch} onChange={v => { setVentasSearch(v); setVentasPage(1); }} placeholder="Buscar venta..." />
         <div className="overflow-x-auto rounded-xl shadow-inner bg-[#23232b]/40 border border-[#D4AF37]/10">
           <table className="min-w-full text-[#B5B5B5]">
             <thead>
@@ -196,7 +178,6 @@ const VentasAdmin = () => {
             </tbody>
           </table>
         </div>
-        <Paginacion currentPage={ventasPage} totalPages={ventasPages} onPageChange={setVentasPage} />
       </div>
     </div>
   );

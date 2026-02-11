@@ -1,31 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ExportButtons from '../../components/ExportButtons';
-import Paginacion from "../../components/Paginacion";
-import Buscador from "../../components/Buscador";
 
 const Inventario = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ventas, setVentas] = useState(null);
-  const [productosPage, setProductosPage] = useState(1);
-  const [productosPages, setProductosPages] = useState(1);
-  const [productosSearch, setProductosSearch] = useState("");
-  const productosLimit = 10;
 
   useEffect(() => {
     const fetchProductos = async () => {
-      setLoading(true);
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/productos`, {
-          params: {
-            page: productosPage,
-            limit: productosLimit,
-            search: productosSearch
-          }
-        });
-        setProductos(data.products || []);
-        setProductosPages(Math.ceil((data.total || 0) / productosLimit));
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/productos`);
+        setProductos(data);
       } catch {
         setProductos([]);
       } finally {
@@ -59,7 +45,7 @@ const Inventario = () => {
     };
     fetchProductos();
     fetchVentas();
-  }, [productosPage, productosSearch]);
+  }, []);
 
   if (loading) {
     return <div className="p-8 text-center text-[#D4AF37] bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A]">Cargando inventario...</div>;
@@ -74,7 +60,6 @@ const Inventario = () => {
         <div className="text-[#E6C86E] text-sm mb-1">Ventas (solo entregados)</div>
         <div className="text-2xl font-bold text-[#D4AF37]">${ventas?.toFixed ? ventas.toFixed(2) : ventas || 0}</div>
       </div>
-      <Buscador value={productosSearch} onChange={v => { setProductosSearch(v); setProductosPage(1); }} placeholder="Buscar producto..." />
       <table className="w-full text-left border-separate border-spacing-y-2 rounded-xl overflow-hidden">
         <thead>
           <tr className="bg-[#23232b] text-[#D4AF37]">
@@ -99,7 +84,6 @@ const Inventario = () => {
           ))}
         </tbody>
       </table>
-      <Paginacion currentPage={productosPage} totalPages={productosPages} onPageChange={setProductosPage} />
     </div>
   );
 };
