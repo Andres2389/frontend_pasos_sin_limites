@@ -65,7 +65,8 @@ const Productos = () => {
       descripcion: p.descripcion ?? "",
       imagen: p.imagen ?? null,
       _id: p._id,
-      categoria: p.categoria ?? ""
+      categoria: p.categoria ?? "",
+      tallas: p.tallas ?? [],
     });
     setIsEditing(true);
     setShowModal(true);
@@ -79,6 +80,7 @@ const Productos = () => {
       descripcion: "",
       categoria: "",
       imagen: null,
+      tallas: [],
     });
     setIsEditing(false);
     setShowModal(true);
@@ -91,6 +93,8 @@ const Productos = () => {
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
+      form.append("tallas", JSON.stringify(selectedProduct.tallas || []));
+
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
       }
@@ -115,6 +119,8 @@ const Productos = () => {
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
+      form.append("tallas", JSON.stringify(selectedProduct.tallas || []));
+
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
       }

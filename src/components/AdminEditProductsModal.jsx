@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const TALLAS_DISPONIBLES = [35, 36, 37, 38, 39, 40, 41, 42, 43];
+
 const AdminEditProductsModal = ({
   product,
   onClose,
@@ -22,6 +24,21 @@ const AdminEditProductsModal = ({
     }
   };
 
+  // 🔥 MANEJO DE TALLAS
+  const handleTallaChange = (talla) => {
+    const tallasActuales = product.tallas || [];
+
+    let nuevasTallas;
+
+    if (tallasActuales.includes(talla)) {
+      nuevasTallas = tallasActuales.filter((t) => t !== talla);
+    } else {
+      nuevasTallas = [...tallasActuales, talla];
+    }
+
+    onChange({ ...product, tallas: nuevasTallas });
+  };
+
   const handleSubmit = () => {
     isEditing ? onSave() : onCreate();
   };
@@ -32,7 +49,7 @@ const AdminEditProductsModal = ({
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md transition-all"
+        className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md transition-all max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2
@@ -51,6 +68,7 @@ const AdminEditProductsModal = ({
             placeholder="Nombre del producto"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
+
           <input
             type="number"
             value={product.cantidad ?? ""}
@@ -58,6 +76,7 @@ const AdminEditProductsModal = ({
             placeholder="Cantidad"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
+
           <input
             type="number"
             value={product.valor ?? ""}
@@ -65,6 +84,7 @@ const AdminEditProductsModal = ({
             placeholder="Valor"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
+
           <input
             type="text"
             value={product.descripcion ?? ""}
@@ -74,11 +94,37 @@ const AdminEditProductsModal = ({
             placeholder="Descripción"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
           />
+
+          {/* 🔥 TALLAS CHECKBOX */}
+          <div>
+            <label className="block font-semibold mb-2 text-gray-700">
+              Tallas Disponibles
+            </label>
+
+            <div className="flex flex-wrap gap-3">
+              {TALLAS_DISPONIBLES.map((talla) => (
+                <label
+                  key={talla}
+                  className="flex items-center gap-2 text-gray-700 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={(product.tallas || []).includes(talla)}
+                    onChange={() => handleTallaChange(talla)}
+                    className="accent-blue-600"
+                  />
+                  {talla}
+                </label>
+              ))}
+            </div>
+          </div>
+
           <input
             type="file"
             onChange={handleImageChange}
             className="w-full border border-gray-300 rounded px-4 py-2"
           />
+
           {previewImage && (
             <img
               src={previewImage}
@@ -95,6 +141,7 @@ const AdminEditProductsModal = ({
           >
             Cancelar
           </button>
+
           <button
             onClick={handleSubmit}
             className={`px-4 py-2 text-white rounded transition ${
