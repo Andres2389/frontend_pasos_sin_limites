@@ -1,8 +1,11 @@
 // src/components/OrderTable.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderTable = ({ orders, onView }) => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const navigate = useNavigate();
+
   if (!orders.length) {
     return (
       <p className="text-center text-[#D4AF37]/80 mt-10">
@@ -25,63 +28,94 @@ const OrderTable = ({ orders, onView }) => {
         </thead>
         <tbody>
           {orders.map((o) => (
-            <tr key={o._id} className="bg-[#181818] hover:bg-[#23232b] transition border-b border-[#23232b]">
-              <td className="px-4 py-3 font-medium text-[#D4AF37]">{o.codigoRecogida}</td>
-              <td className="px-4 py-3 text-white">{new Date(o.createdAt).toLocaleDateString()}</td>
-              <td className="px-4 py-3 text-white">${o.total.toFixed(2)}</td>
-              <td className="px-4 py-3 capitalize text-white">{o.estado}</td>
+            <tr
+              key={o._id}
+              className="bg-[#181818] hover:bg-[#23232b] transition border-b border-[#23232b]"
+            >
+              <td className="px-4 py-3 font-medium text-[#D4AF37]">
+                {o.codigoRecogida}
+              </td>
+              <td className="px-4 py-3 text-white">
+                {new Date(o.createdAt).toLocaleDateString()}
+              </td>
+              <td className="px-4 py-3 text-white">
+                ${o.total.toFixed(2)}
+              </td>
+              <td className="px-4 py-3 capitalize text-white">
+                {o.estado}
+              </td>
               <td className="px-4 py-3 text-center">
+                
                 <button
                   onClick={() => onView(o)}
                   className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition mr-2 shadow"
                 >
                   Ver
                 </button>
-                {/* Solo mostrar botón pagar si es rol user y estado PENDING */}
-                {user.rol === "user" && (o.estado === "PENDING" || o.estado === "PENDIENTE") && !o.entregado && (
-                  <button
-                    onClick={() => {
-                      localStorage.setItem("lastOrderId", o._id);
-                      // Poblar carrito con productos de la orden
-                      const cartItems = o.items.map(i => ({
-                        _id: i.product,
-                        nombre: i.nombre,
-                        valor: i.valorUnitario,
-                        cantidad: i.cantidad,
-                        imagen: i.imagen || "",
-                        talla: i.talla || ""
-                      }));
-                      localStorage.setItem("costehuilense_cart", JSON.stringify(cartItems));
-                      window.location.href = "/checkout";
-                    }}
-                    className="px-3 py-1 bg-[#D4AF37] text-[#181818] font-bold rounded hover:bg-[#bfa133] transition mr-2 shadow"
-                  >
-                    Pagar
-                  </button>
-                )}
-                {/* Botón cancelar solo para rol user si el pedido no está cancelado */}
-                {user.rol === "user" && o.estado !== "CANCELLED" && (
-                  <button
-                    onClick={async () => {
-                      try {
-                        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders/${o._id}/cancel`, {
-                          method: "PUT",
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                          },
-                          body: JSON.stringify({ userId: user._id, rol: user.rol }),
-                        });
-                        window.location.reload();
-                      } catch {
-                        alert("Error al cancelar el pedido");
-                      }
-                    }}
-                    className="px-3 py-1 bg-[#B91C1C] text-white font-bold rounded hover:bg-[#7f1d1d] transition shadow"
-                  >
-                    Cancelar
-                  </button>
-                )}
+
+                {/* BOTÓN PAGAR */}
+                {user.rol === "user" &&
+                  (o.estado === "PENDING" || o.estado === "PENDIENTE") &&
+                  !o.entregado && (
+                    <button
+                      onClick={() => {
+                        localStorage.setItem("lastOrderId", o._id);
+
+                        const cartItems = o.items.map((i) => ({
+                          _id: i.product,
+                          nombre: i.nombre,
+                          valor: i.valorUnitario,
+                          cantidad: i.cantidad,
+                          imagen: i.imagen || "",
+                          talla: i.talla || "",
+                        }));
+
+                        localStorage.setItem(
+                          "costehuilense_cart",
+                          JSON.stringify(cartItems)
+                        );
+
+                        // 🔥 USAR REACT ROUTER
+                        navigate("/checkout");
+                      }}
+                      className="px-3 py-1 bg-[#D4AF37] text-[#181818] font-bold rounded hover:bg-[#bfa133] transition mr-2 shadow"
+                    >
+                      Pagar
+                    </button>
+                  )}
+
+                {/* BOTÓN CANCELAR */}
+                {user.rol === "user" &&
+                  o.estado !== "CANCELLED" && (
+                    <button
+                      onClick={async () => {
+                        try {
+                          await fetch(
+                            `${import.meta.env.VITE_API_BASE_URL}/api/orders/${o._id}/cancel`,
+                            {
+                              method: "PUT",
+                              headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                              },
+                              body: JSON.stringify({
+                                userId: user._id,
+                                rol: user.rol,
+                              }),
+                            }
+                          );
+
+                          window.location.reload();
+                        } catch {
+                          alert("Error al cancelar el pedido");
+                        }
+                      }}
+                      className="px-3 py-1 bg-[#B91C1C] text-white font-bold rounded hover:bg-[#7f1d1d] transition shadow"
+                    >
+                      Cancelar
+                    </button>
+                  )}
+
               </td>
             </tr>
           ))}
