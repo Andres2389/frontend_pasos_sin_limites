@@ -3,19 +3,19 @@ import React, { useState } from "react";
 const TALLAS_DISPONIBLES = [35, 36, 37, 38, 39, 40, 41, 42, 43];
 
 function getTallasArray(tallas) {
-    if (Array.isArray(tallas)) return tallas;
-    if (typeof tallas === "string" && tallas.trim() !== "") {
-      try {
-        const parsed = JSON.parse(tallas);
-        if (Array.isArray(parsed)) return parsed;
-      } catch (e) {
-        return [];
-      }
+  if (Array.isArray(tallas)) return tallas;
+  if (typeof tallas === "string" && tallas.trim() !== "") {
+    try {
+      const parsed = JSON.parse(tallas);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) {
+      return [];
     }
-    return [];
   }
+  return [];
+}
 
-  const AdminEditProductsModal = ({ product, onClose, onChange, onSave, onCreate, isEditing }) => {
+const AdminEditProductsModal = ({ product, onClose, onChange, onSave, onCreate, isEditing }) => {
     const [previewImage, setPreviewImage] = useState(
       product.imagen && typeof product.imagen === "string"
         ? `${import.meta.env.VITE_API_BASE_URL}/uploads/${product.imagen}`
@@ -25,7 +25,11 @@ function getTallasArray(tallas) {
     const handleImageChange = (e) => {
       const file = e.target.files[0];
       if (file) {
-      const AdminEditProductsModal = ({ product, onClose, onChange, onSave, onCreate, isEditing }) => {
+        setPreviewImage(URL.createObjectURL(file));
+        onChange({ ...product, imagen: file });
+      }
+    };
+
     const handleTallaChange = (talla) => {
       const tallasActuales = getTallasArray(product.tallas).map(String);
       let nuevasTallas;
