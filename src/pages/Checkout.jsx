@@ -30,9 +30,10 @@ const Checkout = () => {
     try {
       const payload = {
         userId: user._id,
-        items: items.map(({ _id, cantidad }) => ({
+        items: items.map(({ _id, cantidad, talla }) => ({
           productId: _id,
           cantidad,
+          talla,
         })),
         total: totalPrice,
       };

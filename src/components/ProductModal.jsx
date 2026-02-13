@@ -1,16 +1,37 @@
 // src/components/ProductModal.jsx
 import { FaTimes } from "react-icons/fa";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
+
+const getTallasArray = (tallas) => {
+  if (Array.isArray(tallas)) return tallas;
+  if (typeof tallas === "string" && tallas.trim() !== "") {
+    try {
+      const parsed = JSON.parse(tallas);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) {
+      return [];
+    }
+  }
+  return [];
+};
 
 const ProductModal = ({ product, onClose, openSidebar }) => {
   const { addItem } = useContext(CartContext);
+  const [tallaSeleccionada, setTallaSeleccionada] = useState(null);
+  const [error, setError] = useState("");
 
-  // ✅ PROTECCIÓN CLAVE
   if (!product) return null;
 
+  const tallas = getTallasArray(product.tallas);
+
   const handleAdd = () => {
-    addItem(product);
+    if (tallas.length > 0 && !tallaSeleccionada) {
+      setError("Por favor selecciona una talla");
+      return;
+    }
+    setError("");
+    addItem({ ...product, talla: tallaSeleccionada });
     onClose();
     openSidebar();
   };
@@ -52,6 +73,31 @@ const ProductModal = ({ product, onClose, openSidebar }) => {
           <p className="text-blue-700 font-bold text-xl mb-6">
             ${product.valor}
           </p>
+
+          {tallas.length > 0 && (
+            <div className="mb-4">
+              <p className="text-xs mb-2 text-gray-400">Tallas disponibles:</p>
+              <div className="flex flex-wrap gap-2">
+                {tallas.map((talla) => (
+                  <button
+                    key={talla}
+                    onClick={() => setTallaSeleccionada(talla)}
+                    className={`px-3 py-1 rounded-lg border text-sm font-semibold transition-all ${
+                      tallaSeleccionada === talla
+                        ? "bg-[#D4AF37] text-black border-[#D4AF37]"
+                        : "border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black"
+                    }`}
+                  >
+                    {talla}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-2 text-red-500 text-xs font-semibold">{error}</div>
+          )}
 
           <button
             onClick={handleAdd}
