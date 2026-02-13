@@ -3,6 +3,20 @@ import { CartContext } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
 
 const ProductCard = ({ product, onOpenModal }) => {
+    // Manejo seguro de tallas como array
+    const getTallasArray = (tallas) => {
+      if (Array.isArray(tallas)) return tallas;
+      if (typeof tallas === "string" && tallas.trim() !== "") {
+        try {
+          const parsed = JSON.parse(tallas);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+          // fallback: intentar split si es string simple
+          return tallas.split(",").map(t => t.trim()).filter(Boolean);
+        }
+      }
+      return [];
+    };
   const { addItem } = useContext(CartContext);
   const [tallaSeleccionada, setTallaSeleccionada] = useState(null);
 
@@ -55,11 +69,11 @@ const ProductCard = ({ product, onOpenModal }) => {
         </p>
 
         {/* 🔥 TALLAS DISPONIBLES */}
-        {product.tallas && product.tallas !== "" && (
+        {getTallasArray(product.tallas).length > 0 && (
           <div className="mt-4">
             <p className="text-xs mb-2 text-gray-400">Tallas disponibles:</p>
             <div className="flex flex-wrap gap-2">
-              {product.tallas.map((talla) => (
+              {getTallasArray(product.tallas).map((talla) => (
                 <button
                   key={talla}
                   onClick={() => setTallaSeleccionada(talla)}

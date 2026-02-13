@@ -59,6 +59,21 @@ const Productos = () => {
   };
 
   // 🔥 CONVERTIMOS STRING JSON A ARRAY
+  // Manejo seguro de tallas como array
+  const getTallasArray = (tallas) => {
+    if (Array.isArray(tallas)) return tallas;
+    if (typeof tallas === "string" && tallas.trim() !== "") {
+      try {
+        const parsed = JSON.parse(tallas);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        // fallback: intentar split si es string simple
+        return tallas.split(",").map(t => t.trim()).filter(Boolean);
+      }
+    }
+    return [];
+  };
+
   const openEditModal = (p) => {
     setSelectedProduct({
       nombre: p.nombre ?? "",
@@ -68,7 +83,7 @@ const Productos = () => {
       imagen: p.imagen ?? null,
       _id: p._id,
       categoria: p.categoria ?? "",
-      tallas: p.tallas ? JSON.parse(p.tallas) : [],
+      tallas: getTallasArray(p.tallas),
     });
 
     setIsEditing(true);

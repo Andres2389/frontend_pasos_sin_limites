@@ -98,7 +98,21 @@ const ProductGallery = ({ openSidebar }) => {
       {/* Grid */}
       <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
         {productos.map((p, i) => {
-          const tallas = [38, 39, 40, 41, 42, '+2'];
+          // Manejo seguro de tallas como array
+          const getTallasArray = (tallas) => {
+            if (Array.isArray(tallas)) return tallas;
+            if (typeof tallas === "string" && tallas.trim() !== "") {
+              try {
+                const parsed = JSON.parse(tallas);
+                if (Array.isArray(parsed)) return parsed;
+              } catch (e) {
+                // fallback: intentar split si es string simple
+                return tallas.split(",").map(t => t.trim()).filter(Boolean);
+              }
+            }
+            return [];
+          };
+          const tallas = getTallasArray(p.tallas);
           const selectedTalla = selectedSizes[p._id] || null;
           return (
             <div
