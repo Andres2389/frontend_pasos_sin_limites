@@ -1,4 +1,3 @@
-// src/pages/admin/Productos.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -59,6 +58,7 @@ const Productos = () => {
     }
   };
 
+  // 🔥 CONVERTIMOS STRING JSON A ARRAY
   const openEditModal = (p) => {
     setSelectedProduct({
       nombre: p.nombre ?? "",
@@ -68,8 +68,9 @@ const Productos = () => {
       imagen: p.imagen ?? null,
       _id: p._id,
       categoria: p.categoria ?? "",
-      tallas: p.tallas ?? "", // 🔥 AHORA ES STRING
+      tallas: p.tallas ? JSON.parse(p.tallas) : [],
     });
+
     setIsEditing(true);
     setShowModal(true);
   };
@@ -82,22 +83,25 @@ const Productos = () => {
       descripcion: "",
       categoria: "",
       imagen: null,
-      tallas: "", // 🔥 STRING VACÍO
+      tallas: [],
     });
+
     setIsEditing(false);
     setShowModal(true);
   };
 
+  // 🔥 ACTUALIZAR
   const handleSaveChanges = async () => {
     try {
       const form = new FormData();
+
       form.append("nombre", selectedProduct.nombre);
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
 
-      // 🔥 SIN JSON.stringify
-      form.append("tallas", selectedProduct.tallas || "");
+      // 🔥 ARRAY → STRING JSON
+      form.append("tallas", JSON.stringify(selectedProduct.tallas));
 
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
@@ -109,28 +113,28 @@ const Productos = () => {
       );
 
       setProductos((p) =>
-        p.map((x) =>
-          x._id === data.producto._id ? data.producto : x
-        )
+        p.map((x) => (x._id === data.producto._id ? data.producto : x))
       );
 
       toast.success("Producto actualizado correctamente");
       setShowModal(false);
-    } catch {
+    } catch (error) {
       toast.error("Error al actualizar producto");
     }
   };
 
+  // 🔥 CREAR
   const handleCreateProduct = async () => {
     try {
       const form = new FormData();
+
       form.append("nombre", selectedProduct.nombre);
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
 
-      // 🔥 SIN JSON.stringify
-      form.append("tallas", selectedProduct.tallas || "");
+      // 🔥 ARRAY → STRING JSON
+      form.append("tallas", JSON.stringify(selectedProduct.tallas));
 
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
@@ -142,9 +146,10 @@ const Productos = () => {
       );
 
       setProductos((p) => [...p, data.producto]);
+
       toast.success("Producto creado exitosamente");
       setShowModal(false);
-    } catch {
+    } catch (error) {
       toast.error("Error al crear producto");
     }
   };
@@ -173,11 +178,7 @@ const Productos = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A] p-4">
       <div className="max-w-6xl mx-auto bg-[#181818] rounded-2xl shadow-2xl p-6 mb-6 flex items-center border border-[#23232b]/60">
-        <img
-          src={Logo}
-          alt="Logo"
-          className="h-14 mr-4 rounded-xl shadow"
-        />
+        <img src={Logo} alt="Logo" className="h-14 mr-4 rounded-xl shadow" />
         <h1 className="text-3xl font-extrabold text-[#D4AF37] drop-shadow">
           Gestión de Productos
         </h1>
