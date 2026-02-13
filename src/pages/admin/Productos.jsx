@@ -17,10 +17,11 @@ const Productos = () => {
   const [isEditing, setIsEditing] = useState(false);
   const itemsPerPage = 5;
 
-  // Fetch productos dentro de un useEffect normal
   const fetchProductos = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/productos`);
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/productos`
+      );
       setProductos(data);
     } catch {
       toast.error("Error al obtener productos");
@@ -44,9 +45,12 @@ const Productos = () => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     });
+
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/productos/${id}`);
+        await axios.delete(
+          `${import.meta.env.VITE_API_BASE_URL}/api/productos/${id}`
+        );
         setProductos((p) => p.filter((x) => x._id !== id));
         toast.success("Producto eliminado correctamente");
       } catch {
@@ -55,9 +59,7 @@ const Productos = () => {
     }
   };
 
-
   const openEditModal = (p) => {
-    // Asegura que el producto tenga todas las propiedades requeridas para inputs controlados
     setSelectedProduct({
       nombre: p.nombre ?? "",
       cantidad: p.cantidad ?? "",
@@ -66,7 +68,7 @@ const Productos = () => {
       imagen: p.imagen ?? null,
       _id: p._id,
       categoria: p.categoria ?? "",
-      tallas: p.tallas ?? [],
+      tallas: p.tallas ?? "", // 🔥 AHORA ES STRING
     });
     setIsEditing(true);
     setShowModal(true);
@@ -80,7 +82,7 @@ const Productos = () => {
       descripcion: "",
       categoria: "",
       imagen: null,
-      tallas: [],
+      tallas: "", // 🔥 STRING VACÍO
     });
     setIsEditing(false);
     setShowModal(true);
@@ -93,18 +95,25 @@ const Productos = () => {
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
-      form.append("tallas", JSON.stringify(selectedProduct.tallas || []));
+
+      // 🔥 SIN JSON.stringify
+      form.append("tallas", selectedProduct.tallas || "");
 
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
       }
+
       const { data } = await axios.put(
         `${import.meta.env.VITE_API_BASE_URL}/api/productos/${selectedProduct._id}`,
         form
       );
+
       setProductos((p) =>
-        p.map((x) => (x._id === data.producto._id ? data.producto : x))
+        p.map((x) =>
+          x._id === data.producto._id ? data.producto : x
+        )
       );
+
       toast.success("Producto actualizado correctamente");
       setShowModal(false);
     } catch {
@@ -119,15 +128,19 @@ const Productos = () => {
       form.append("cantidad", selectedProduct.cantidad);
       form.append("valor", selectedProduct.valor);
       form.append("descripcion", selectedProduct.descripcion);
-      form.append("tallas", JSON.stringify(selectedProduct.tallas || []));
+
+      // 🔥 SIN JSON.stringify
+      form.append("tallas", selectedProduct.tallas || "");
 
       if (selectedProduct.imagen instanceof File) {
         form.append("imagen", selectedProduct.imagen);
       }
+
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/productos`,
         form
       );
+
       setProductos((p) => [...p, data.producto]);
       toast.success("Producto creado exitosamente");
       setShowModal(false);
@@ -139,7 +152,9 @@ const Productos = () => {
   const filtered = productos.filter((p) =>
     p.nombre.toLowerCase().includes(search.toLowerCase())
   );
+
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
+
   const paginated = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -148,22 +163,26 @@ const Productos = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A]">
-        <p className="text-[#D4AF37] text-xl font-bold">Cargando productos...</p>
+        <p className="text-[#D4AF37] text-xl font-bold">
+          Cargando productos...
+        </p>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0B0B0B] to-[#1A1A1A] p-4">
-      {/* Cabecera */}
       <div className="max-w-6xl mx-auto bg-[#181818] rounded-2xl shadow-2xl p-6 mb-6 flex items-center border border-[#23232b]/60">
-        <img src={Logo} alt="Logo" className="h-14 mr-4 rounded-xl shadow" />
+        <img
+          src={Logo}
+          alt="Logo"
+          className="h-14 mr-4 rounded-xl shadow"
+        />
         <h1 className="text-3xl font-extrabold text-[#D4AF37] drop-shadow">
           Gestión de Productos
         </h1>
       </div>
 
-      {/* Botón crear producto */}
       <div className="max-w-6xl mx-auto flex justify-end mb-4">
         <button
           onClick={openCreateModal}
@@ -173,7 +192,6 @@ const Productos = () => {
         </button>
       </div>
 
-      {/* Tabla y buscador */}
       <AdminProductsTable
         productos={paginated}
         onEdit={openEditModal}
@@ -189,11 +207,10 @@ const Productos = () => {
         onPageChange={setCurrentPage}
       />
 
-      {/* Modal */}
       {showModal && selectedProduct && (
         <AdminEditProductsModal
           product={selectedProduct}
-          onClose={() => setShowModal(false)}   
+          onClose={() => setShowModal(false)}
           onChange={setSelectedProduct}
           onSave={handleSaveChanges}
           onCreate={handleCreateProduct}
