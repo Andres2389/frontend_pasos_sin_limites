@@ -42,6 +42,7 @@ export default function AdminOrderModal({ order, onClose, onDelivered }) {
           <thead>
             <tr>
               <th className="py-2">Producto</th>
+              <th className="py-2">Talla</th>
               <th className="py-2">Cantidad</th>
               <th className="py-2">Subtotal</th>
             </tr>
@@ -49,12 +50,12 @@ export default function AdminOrderModal({ order, onClose, onDelivered }) {
           <tbody>
             {order.items.map((it) => (
               <tr key={it.product || it._id}>
-                <td className="py-2">
-                  {it.nombre}
-                  {it.talla && (
-                    <span className="ml-2 text-xs text-gray-500">
-                      (Talla: {it.talla})
-                    </span>
+                <td className="py-2">{it.nombre}</td>
+                <td className="py-2 text-center">
+                  {typeof it.talla !== "undefined" && it.talla !== null && it.talla !== "" ? (
+                    <span className="text-xs text-gray-500 font-semibold">{it.talla}</span>
+                  ) : (
+                    <span className="text-xs text-gray-400">-</span>
                   )}
                 </td>
                 <td className="py-2">{it.cantidad}</td>
