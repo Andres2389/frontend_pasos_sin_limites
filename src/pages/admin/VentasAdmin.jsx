@@ -203,22 +203,22 @@ const VentasAdmin = () => {
           Ventas Diarias
         </h2>
 
-        <div className="overflow-x-auto rounded-xl bg-[#23232b]/40 border border-[#D4AF37]/10">
-          <table className="min-w-full">
+        <div className="overflow-x-auto rounded-xl bg-[#23232b]/40 border border-[#D4AF37]/10 max-w-full">
+          <table className="min-w-[600px] w-full max-w-4xl table-auto">
             <thead>
               <tr className="bg-[#181818] text-[#D4AF37]">
-                <th className="py-2 px-4">Fecha</th>
-                <th className="py-2 px-4">Total</th>
-                <th className="py-2 px-4">Productos</th>
+                <th className="py-2 px-4 whitespace-nowrap">Fecha</th>
+                <th className="py-2 px-4 whitespace-nowrap">Total</th>
+                <th className="py-2 px-4 whitespace-nowrap">Productos</th>
               </tr>
             </thead>
             <tbody>
               {paginatedVentas.map((v) => (
                 <tr key={v._id}>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4 whitespace-nowrap">
                     {new Date(v.fecha).toLocaleDateString()}
                   </td>
-                  <td className="py-2 px-4 text-[#D4AF37] font-semibold">
+                  <td className="py-2 px-4 text-[#D4AF37] font-semibold whitespace-nowrap">
                     {v.total.toLocaleString("es-CO", {
                       style: "currency",
                       currency: "COP",
