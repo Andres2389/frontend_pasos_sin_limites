@@ -26,22 +26,26 @@ const AdminEditProductsModal = ({
 
   // 🔥 MANEJO DE TALLAS
   const handleTallaChange = (talla) => {
-    const tallasActuales = product.tallas || [];
+  const tallasActuales = product.tallas
+    ? product.tallas.split(",")
+    : [];
 
-    let nuevasTallas;
+  let nuevasTallas;
 
-    if (tallasActuales.includes(talla)) {
-      nuevasTallas = tallasActuales.filter((t) => t !== talla);
-    } else {
-      nuevasTallas = [...tallasActuales, talla];
-    }
+  if (tallasActuales.includes(String(talla))) {
+    nuevasTallas = tallasActuales.filter(
+      (t) => t !== String(talla)
+    );
+  } else {
+    nuevasTallas = [...tallasActuales, String(talla)];
+  }
 
-    onChange({ ...product, tallas: nuevasTallas });
-  };
+  onChange({
+    ...product,
+    tallas: nuevasTallas.join(","),
+  });
+};
 
-  const handleSubmit = () => {
-    isEditing ? onSave() : onCreate();
-  };
 
   return (
     <div
@@ -109,7 +113,11 @@ const AdminEditProductsModal = ({
                 >
                   <input
                     type="checkbox"
-                    checked={(product.tallas || []).includes(talla)}
+                    checked={
+                      product.tallas
+                        ? product.tallas.split(",").includes(String(talla))
+                        : false
+                    }
                     onChange={() => handleTallaChange(talla)}
                     className="accent-blue-600"
                   />

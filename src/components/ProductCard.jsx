@@ -55,7 +55,7 @@ const ProductCard = ({ product, onOpenModal }) => {
         </p>
 
         {/* 🔥 TALLAS DISPONIBLES */}
-        {product.tallas && product.tallas.length > 0 && (
+        {product.tallas && product.tallas !== "" && (
           <div className="mt-4">
             <p className="text-xs mb-2 text-gray-400">Tallas disponibles:</p>
             <div className="flex flex-wrap gap-2">
