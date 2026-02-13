@@ -24,28 +24,36 @@ const AdminEditProductsModal = ({
     }
   };
 
-  // 🔥 MANEJO DE TALLAS
+  // ✅ MANEJO DE TALLAS COMO STRING
   const handleTallaChange = (talla) => {
-  const tallasActuales = product.tallas
-    ? product.tallas.split(",")
-    : [];
+    const tallasActuales = product.tallas
+      ? product.tallas.split(",")
+      : [];
 
-  let nuevasTallas;
+    let nuevasTallas;
 
-  if (tallasActuales.includes(String(talla))) {
-    nuevasTallas = tallasActuales.filter(
-      (t) => t !== String(talla)
-    );
-  } else {
-    nuevasTallas = [...tallasActuales, String(talla)];
-  }
+    if (tallasActuales.includes(String(talla))) {
+      nuevasTallas = tallasActuales.filter(
+        (t) => t !== String(talla)
+      );
+    } else {
+      nuevasTallas = [...tallasActuales, String(talla)];
+    }
 
-  onChange({
-    ...product,
-    tallas: nuevasTallas.join(","),
-  });
-};
+    onChange({
+      ...product,
+      tallas: nuevasTallas.join(","),
+    });
+  };
 
+  // 🔥 ESTA FUNCIÓN FALTABA
+  const handleSubmit = () => {
+    if (isEditing) {
+      onSave();
+    } else {
+      onCreate();
+    }
+  };
 
   return (
     <div
@@ -70,7 +78,7 @@ const AdminEditProductsModal = ({
             value={product.nombre ?? ""}
             onChange={(e) => onChange({ ...product, nombre: e.target.value })}
             placeholder="Nombre del producto"
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
+            className="w-full border border-gray-300 rounded px-4 py-2"
           />
 
           <input
@@ -78,7 +86,7 @@ const AdminEditProductsModal = ({
             value={product.cantidad ?? ""}
             onChange={(e) => onChange({ ...product, cantidad: e.target.value })}
             placeholder="Cantidad"
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
+            className="w-full border border-gray-300 rounded px-4 py-2"
           />
 
           <input
@@ -86,7 +94,7 @@ const AdminEditProductsModal = ({
             value={product.valor ?? ""}
             onChange={(e) => onChange({ ...product, valor: e.target.value })}
             placeholder="Valor"
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
+            className="w-full border border-gray-300 rounded px-4 py-2"
           />
 
           <input
@@ -96,10 +104,9 @@ const AdminEditProductsModal = ({
               onChange({ ...product, descripcion: e.target.value })
             }
             placeholder="Descripción"
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-600 outline-none"
+            className="w-full border border-gray-300 rounded px-4 py-2"
           />
 
-          {/* 🔥 TALLAS CHECKBOX */}
           <div>
             <label className="block font-semibold mb-2 text-gray-700">
               Tallas Disponibles
@@ -145,14 +152,14 @@ const AdminEditProductsModal = ({
         <div className="mt-6 flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded"
           >
             Cancelar
           </button>
 
           <button
             onClick={handleSubmit}
-            className={`px-4 py-2 text-white rounded transition ${
+            className={`px-4 py-2 text-white rounded ${
               isEditing
                 ? "bg-[#0056A6] hover:bg-[#004c94]"
                 : "bg-blue-600 hover:bg-blue-700"
