@@ -26,6 +26,7 @@ const OrderModal = ({ order, onClose }) => {
           <thead>
             <tr className="bg-[#23232b] text-[#D4AF37]">
               <th className="py-2 px-3">Producto</th>
+              <th className="py-2 px-3">Talla</th>
               <th className="py-2 px-3">Cantidad</th>
               <th className="py-2 px-3">Subtotal</th>
             </tr>
@@ -33,10 +34,12 @@ const OrderModal = ({ order, onClose }) => {
           <tbody>
             {order.items.map((it) => (
               <tr key={it.product} className="hover:bg-[#23232b]/40 transition">
-                <td className="py-2 px-3">
-                  {it.nombre}
-                  {it.talla && (
-                    <span className="ml-2 text-xs text-[#E6C86E]">Talla: {it.talla}</span>
+                <td className="py-2 px-3">{it.nombre}</td>
+                <td className="py-2 px-3 text-center">
+                  {typeof it.talla !== "undefined" && it.talla !== null && it.talla !== "" ? (
+                    <span className="text-xs text-[#E6C86E] font-semibold">{it.talla}</span>
+                  ) : (
+                    <span className="text-xs text-[#B5B5B5]">-</span>
                   )}
                 </td>
                 <td className="py-2 px-3">{it.cantidad}</td>
