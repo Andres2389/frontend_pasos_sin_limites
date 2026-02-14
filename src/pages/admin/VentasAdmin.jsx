@@ -281,29 +281,27 @@ const VentasAdmin = () => {
           </div>
         )}
       </div>
-    </div>
-    
-    {/* Modal para mostrar todos los productos de una venta */}
-    {ventaModal && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-[#23232b] p-6 rounded-xl max-w-md w-full border border-[#D4AF37]/20">
-          <h2 className="text-lg font-bold text-[#D4AF37] mb-4">Productos de la venta</h2>
-          <div className="max-h-60 overflow-y-auto">
-            {ventaModal.productos.map((prod) => (
-              <div key={prod.productId} className="mb-2 text-white">
-                {prod.nombre} ({prod.cantidad})
-              </div>
-            ))}
+      {/* Modal para mostrar todos los productos de una venta */}
+      {ventaModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-[#23232b] p-6 rounded-xl max-w-md w-full border border-[#D4AF37]/20">
+            <h2 className="text-lg font-bold text-[#D4AF37] mb-4">Productos de la venta</h2>
+            <div className="max-h-60 overflow-y-auto">
+              {ventaModal.productos.map((prod) => (
+                <div key={prod.productId} className="mb-2 text-white">
+                  {prod.nombre} ({prod.cantidad})
+                </div>
+              ))}
+            </div>
+            <button
+              className="mt-4 px-4 py-2 bg-[#D4AF37] text-black rounded hover:bg-yellow-400 w-full"
+              onClick={() => setVentaModal(null)}
+            >
+              Cerrar
+            </button>
           </div>
-          <button
-            className="mt-4 px-4 py-2 bg-[#D4AF37] text-black rounded hover:bg-yellow-400 w-full"
-            onClick={() => setVentaModal(null)}
-          >
-            Cerrar
-          </button>
         </div>
-      </div>
-    )}
+      )}
 };
 
 export default VentasAdmin;
