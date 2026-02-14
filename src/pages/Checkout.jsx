@@ -33,7 +33,7 @@ const Checkout = () => {
         items: items.map(({ _id, cantidad, talla }) => ({
           productId: _id,
           cantidad,
-          talla,
+          talla: typeof talla !== "undefined" && talla !== null ? talla : "",
         })),
         total: totalPrice,
       };
