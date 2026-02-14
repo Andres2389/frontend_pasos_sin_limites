@@ -69,7 +69,10 @@ const VentasAdmin = () => {
     setProductPage(1);
   }, [search]);
 
+  // 🔥 Selección segura
   const handleSelect = (id, cantidad) => {
+    if (!cantidad || cantidad <= 0) return;
+
     setSeleccionados((prev) => {
       const existe = prev.find((p) => p._id === id);
       if (existe) {
@@ -81,8 +84,13 @@ const VentasAdmin = () => {
     });
   };
 
+  // 🔥 Venta blindada
   const handleVenta = async () => {
-    if (seleccionados.length === 0) {
+    const productosValidos = seleccionados.filter(
+      (p) => p.cantidad && p.cantidad > 0
+    );
+
+    if (productosValidos.length === 0) {
       toast.info("Selecciona al menos un producto");
       return;
     }
@@ -96,24 +104,25 @@ const VentasAdmin = () => {
         `${import.meta.env.VITE_API_BASE_URL}/api/sales/admin`,
         {
           userId: user._id,
-          productos: seleccionados,
+          productos: productosValidos,
         }
       );
 
       toast.success("Venta registrada correctamente");
       setSeleccionados([]);
 
+      // Recargar ventas
       const { data: ventasData } = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/sales/daily?userId=${user._id}`
       );
-
       setVentasDiarias(ventasData.ventas || []);
 
+      // Recargar productos
       const { data: prodData } = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/productos/`
       );
-
       setProductos(prodData || []);
+
     } catch (err) {
       toast.error(
         err.response?.data?.message || "Error al registrar venta"
