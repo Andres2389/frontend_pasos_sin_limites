@@ -304,7 +304,6 @@ const VentasAdmin = () => {
         </div>
       </div>
     )}
-}
 };
 
 export default VentasAdmin;
