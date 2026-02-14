@@ -12,25 +12,25 @@ const Pedidos = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const fetchOrders = async () => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user._id) {
+      toast.info("Por favor inicia sesión.");
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/orders/my?userId=${user._id}`
+      );
+      setOrders(res.data);
+    } catch {
+      toast.error("Error al cargar tus pedidos");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      if (!user._id) {
-        toast.info("Por favor inicia sesión.");
-        setLoading(false);
-        return;
-      }
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/orders/my?userId=${user._id}`
-        );
-        setOrders(res.data);
-      } catch {
-        toast.error("Error al cargar tus pedidos");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchOrders();
   }, []);
 
@@ -81,6 +81,7 @@ const Pedidos = () => {
           setSelectedOrder(mappedOrder);
           setShowModal(true);
         }}
+        onCancelSuccess={fetchOrders}
       />
 
       {/* Modal */}

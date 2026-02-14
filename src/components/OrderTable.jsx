@@ -33,9 +33,7 @@ const OrderTable = ({ orders, onView }) => {
       );
 
       toast.success("Pedido cancelado correctamente");
-
-      // Refrescar lista
-      window.location.reload();
+      if (typeof onCancelSuccess === "function") onCancelSuccess();
     } catch (error) {
       console.error(error);
       toast.error("Error al cancelar el pedido");
