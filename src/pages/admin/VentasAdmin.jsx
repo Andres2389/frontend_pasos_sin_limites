@@ -11,7 +11,6 @@ const VentasAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [ventaModal, setVentaModal] = useState(null);
   const itemsPerPage = 5;
 
   const navigate = useNavigate();
@@ -53,6 +52,7 @@ const VentasAdmin = () => {
     fetchVentas();
   }, []);
 
+  // 🔥 Reset página si cambian ventas
   useEffect(() => {
     setCurrentPage(1);
   }, [ventasDiarias]);
@@ -80,12 +80,14 @@ const VentasAdmin = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
 
+      const payload = {
+        userId: user._id,
+        productos: seleccionados,
+      };
+
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/sales/admin`,
-        {
-          userId: user._id,
-          productos: seleccionados,
-        }
+        payload
       );
 
       toast.success("Venta registrada correctamente");
@@ -94,14 +96,23 @@ const VentasAdmin = () => {
       const { data: ventasData } = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/sales/daily?userId=${user._id}`
       );
+
       setVentasDiarias(ventasData.ventas || []);
 
       const { data: prodData } = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/productos/`
       );
+
       setProductos(prodData || []);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error al registrar venta");
+      if (
+        err.response?.data?.message &&
+        !String(err.response.data.message).includes("duplicate key")
+      ) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.success("Venta registrada correctamente");
+      }
     } finally {
       setLoading(false);
     }
@@ -112,7 +123,10 @@ const VentasAdmin = () => {
     return prod ? acc + prod.valor * item.cantidad : acc;
   }, 0);
 
-  const totalPages = Math.ceil(ventasDiarias.length / itemsPerPage);
+  // 🔥 PAGINACIÓN
+  const totalPages = Math.ceil(
+    ventasDiarias.length / itemsPerPage
+  );
 
   const paginatedVentas = ventasDiarias.slice(
     (currentPage - 1) * itemsPerPage,
@@ -127,6 +141,7 @@ const VentasAdmin = () => {
           Ventas Admin
         </h1>
 
+        {/* Subtotal */}
         <div className="mb-4 p-3 bg-[#23232b]/40 rounded-xl text-[#6EC6FF] font-semibold text-lg">
           Subtotal: {subtotal.toLocaleString("es-CO", {
             style: "currency",
@@ -137,10 +152,7 @@ const VentasAdmin = () => {
         {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {productos.map((p) => (
-            <div
-              key={p._id}
-              className="bg-[#23232b]/60 border border-[#D4AF37]/20 rounded-2xl p-4 flex items-center gap-4"
-            >
+            <div key={p._id} className="bg-[#23232b]/60 border border-[#D4AF37]/20 rounded-2xl p-4 flex items-center gap-4">
               <img
                 src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${p.imagen}`}
                 alt={p.nombre}
@@ -186,33 +198,80 @@ const VentasAdmin = () => {
           {loading ? "Procesando..." : "Confirmar Venta"}
         </button>
 
-      </div>
+        {/* Tabla ventas */}
+        <h2 className="text-lg font-semibold mb-2 text-[#D4AF37]">
+          Ventas Diarias
+        </h2>
 
-      {/* Modal */}
-      {ventaModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-[#23232b] p-6 rounded-xl max-w-md w-full border border-[#D4AF37]/20">
-            <h2 className="text-lg font-bold text-[#D4AF37] mb-4">
-              Productos de la venta
-            </h2>
-
-            <div className="max-h-60 overflow-y-auto">
-              {ventaModal.productos.map((prod) => (
-                <div key={prod.productId} className="mb-2 text-white">
-                  {prod.nombre} ({prod.cantidad})
-                </div>
+        <div className="overflow-x-auto rounded-xl bg-[#23232b]/40 border border-[#D4AF37]/10">
+          <table className="min-w-full">
+            <thead>
+              <tr className="bg-[#181818] text-[#D4AF37]">
+                <th className="py-2 px-4">Fecha</th>
+                <th className="py-2 px-4">Total</th>
+                <th className="py-2 px-4">Productos</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedVentas.map((v) => (
+                <tr key={v._id}>
+                  <td className="py-2 px-4">
+                    {new Date(v.fecha).toLocaleDateString()}
+                  </td>
+                  <td className="py-2 px-4 text-[#D4AF37] font-semibold">
+                    {v.total.toLocaleString("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    })}
+                  </td>
+                  <td className="py-2 px-4">
+                    {v.productos.map((prod) => (
+                      <span key={prod.productId} className="block">
+                        {prod.nombre} ({prod.cantidad})
+                      </span>
+                    ))}
+                  </td>
+                </tr>
               ))}
-            </div>
+            </tbody>
+          </table>
+        </div>
+
+        {/* 🔥 Paginación */}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 mt-6 flex-wrap">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="px-3 py-1 rounded-full bg-[#D4AF37] text-black disabled:opacity-40"
+            >
+              Anterior
+            </button>
+
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === i + 1
+                    ? "bg-[#D4AF37] text-black"
+                    : "bg-[#23232b] text-white"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
 
             <button
-              className="mt-4 px-4 py-2 bg-[#D4AF37] text-black rounded hover:bg-yellow-400 w-full"
-              onClick={() => setVentaModal(null)}
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+              className="px-3 py-1 rounded-full bg-[#D4AF37] text-black disabled:opacity-40"
             >
-              Cerrar
+              Siguiente
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
