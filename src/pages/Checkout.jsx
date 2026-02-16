@@ -129,7 +129,7 @@ const Checkout = () => {
           onClick={handleMercadoPago}
           className="mt-4 w-full bg-green-600 text-white py-3 rounded"
         >
-          Pagar con Mercado Pago
+          Pagar
         </button>
 
         <button
