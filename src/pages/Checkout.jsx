@@ -122,7 +122,7 @@ const Checkout = () => {
           onClick={handleFinish}
           className="mt-4 w-full bg-blue-600 text-white py-3 rounded"
         >
-          Finalizar Pedido
+          hacer Pedido para poder pagar
         </button>
 
         <button
