@@ -1,24 +1,41 @@
 import { Link } from "react-router-dom";
-import Logo from "../assets/logo.png";
-
+import Logo from "../assets/logohome.png";
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0056A6] via-[#0077C2] to-[#00B4D8] flex flex-col items-center justify-center px-4">
-      {/* Logo y nombre de la aplicación */}
-      <div className="flex items-center mb-8">
-        <img src={Logo} alt="Logo Pasos Sin Límites" className="h-12 mr-4 drop-shadow-lg" />
-        <h1 className="text-3xl font-extrabold text-white tracking-wide drop-shadow">PASOS SIN LÍMITES</h1>
-      </div>
-      <div className="bg-white/90 p-10 rounded-2xl shadow-2xl text-center max-w-md w-full border border-[#0056A6]/20">
-        <h2 className="text-7xl font-black text-[#0056A6] mb-4 drop-shadow">404</h2>
-        <h3 className="text-2xl font-semibold text-[#0056A6] mb-2">Página no encontrada</h3>
-        <p className="text-gray-700 mb-8 text-base">
-          Lo sentimos, la ruta que estás buscando no existe o fue movida.
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-[#111827] to-black px-4">
+      <div className="bg-[#18181b] border border-[#FFD700]/30 shadow-2xl rounded-3xl p-10 max-w-md w-full text-center">
+
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-6">
+          <img
+            src={Logo}
+            alt="Logo Pasos Sin Límites"
+            className="h-16 mb-3 drop-shadow-lg"
+          />
+          <h1 className="text-2xl font-bold text-[#FFD700] tracking-wide">
+            PASOS SIN LÍMITES
+          </h1>
+        </div>
+
+        {/* Código */}
+        <h2 className="text-7xl font-black text-[#FFD700] mb-4 drop-shadow-lg">
+          404
+        </h2>
+
+        {/* Texto */}
+        <h3 className="text-xl font-semibold text-white mb-2">
+          Página no encontrada
+        </h3>
+
+        <p className="text-gray-400 mb-8">
+          La ruta que estás buscando no existe o fue movida.
         </p>
+
+        {/* Botón */}
         <Link
           to="/"
-          className="inline-block px-8 py-3 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#0056A6] font-bold rounded-lg shadow hover:scale-105 transition-transform duration-200"
+          className="inline-block px-8 py-3 bg-[#FFD700] text-black font-bold rounded-xl hover:bg-yellow-400 transition-all duration-300 shadow-lg hover:scale-105"
         >
           Volver al inicio
         </Link>
